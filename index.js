@@ -98,10 +98,10 @@ function filterUnfundedOnly() {
     deleteChildElements(gamesContainer);
 
     // use filter() to get a list of games that have not yet met their goal
-
+    const unfundedGames = GAMES_JSON.filter(game => game.pledged < game.goal);
 
     // use the function we previously created to add the unfunded games to the DOM
-
+    addGamesToPage(unfundedGames);
 }
 
 // show only games that are fully funded
@@ -109,10 +109,10 @@ function filterFundedOnly() {
     deleteChildElements(gamesContainer);
 
     // use filter() to get a list of games that have met or exceeded their goal
+    const fundedGames = GAMES_JSON.filter(game => game.pledged >= game.goal);
 
-
-    // use the function we previously created to add unfunded games to the DOM
-
+    // use the function we previously created to add funded games to the DOM
+    addGamesToPage(fundedGames);
 }
 
 // show all games
@@ -120,7 +120,7 @@ function showAllGames() {
     deleteChildElements(gamesContainer);
 
     // add all games from the JSON data to the DOM
-
+    addGamesToPage(GAMES_JSON);
 }
 
 // select each button in the "Our Games" section
@@ -129,7 +129,9 @@ const fundedBtn = document.getElementById("funded-btn");
 const allBtn = document.getElementById("all-btn");
 
 // add event listeners with the correct functions to each button
-
+unfundedBtn.addEventListener("click", filterUnfundedOnly);
+fundedBtn.addEventListener("click", filterFundedOnly);
+allBtn.addEventListener("click", showAllGames);
 
 /*************************************************************************************
  * Challenge 6: Add more information at the top of the page about the company.
@@ -140,12 +142,19 @@ const allBtn = document.getElementById("all-btn");
 const descriptionContainer = document.getElementById("description-container");
 
 // use filter or reduce to count the number of unfunded games
+const numUnfundedGames = GAMES_JSON.filter(game => game.pledged < game.goal).length;
 
+const formattedTotalAmountRaised = totalAmountRaised.toLocaleString();
 
 // create a string that explains the number of unfunded games using the ternary operator
-
+const unfundedGamesExplanation = numUnfundedGames > 0
+  ? `A total of $${formattedTotalAmountRaised} has been raised for ${GAMES_JSON.length} games. Currently, ${numUnfundedGames} game${numUnfundedGames !== 1 ? 's' : ''} remains unfunded. We need your help to fund these amazing games!`
+  : 'All our games are fully funded!';
 
 // create a new DOM element containing the template string and append it to the description container
+const unfundedGamesInfo = document.createElement("p");
+unfundedGamesInfo.textContent = unfundedGamesExplanation;
+descriptionContainer.appendChild(unfundedGamesInfo);
 
 /************************************************************************************
  * Challenge 7: Select & display the top 2 games
@@ -154,13 +163,21 @@ const descriptionContainer = document.getElementById("description-container");
 
 const firstGameContainer = document.getElementById("first-game");
 const secondGameContainer = document.getElementById("second-game");
-
-const sortedGames =  GAMES_JSON.sort( (item1, item2) => {
-    return item2.pledged - item1.pledged;
-});
+const sortedGames = GAMES_JSON.sort((a, b) => b.pledged - a.pledged);
 
 // use destructuring and the spread operator to grab the first and second games
+const [firstGame, secondGame, ...remainingGames] = sortedGames;
 
 // create a new element to hold the name of the top pledge game, then append it to the correct element
+const firstGameElement = document.createElement("div");
+firstGameElement.innerHTML = `
+    <p>${firstGame.name} - Pledged: $${firstGame.pledged.toLocaleString()}</p>
+`;
+firstGameContainer.appendChild(firstGameElement);
 
-// do the same for the runner up item
+// create a new element for the second game
+const secondGameElement = document.createElement("div");
+secondGameElement.innerHTML = `
+    <p>${secondGame.name} - Pledged: $${secondGame.pledged.toLocaleString()}</p>
+`;
+secondGameContainer.appendChild(secondGameElement);
