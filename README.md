@@ -23,9 +23,9 @@ The following **optional** features are implemented:
 
 Here's a walkthrough of implemented features:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+![](https://github.com/ambijani/web102_prework_bijani/blob/main/Web102PreWorkGIF.gif)
 
-GIF created with ...  [LineCap](https://www.cockos.com/licecap/) for macOS
+GIF created with [LineCap](https://www.cockos.com/licecap/) for macOS
 
 ## Notes
 
